@@ -1,0 +1,118 @@
+---
+export const prerender = true;
+
+// imports
+import Layout from "../../layouts/Layout.astro";
+import { fetchAllCountries } from "../../data/data";
+
+// components
+import Container from "../../components/Container.astro";
+
+// static paths
+export async function getStaticPaths() {
+  const countries = await fetchAllCountries();
+  return countries.map((country: any) => ({
+    params: { cca3: country.cca3 },
+  }));
+}
+
+// params
+const { cca3 } = Astro.params;
+
+// data
+const countries = await fetchAllCountries();
+const country = countries.find((c: any) => c.cca3 === cca3);
+
+// redirect
+if (!country) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout>
+  <main data-pagefind-body>
+    <Container>
+      <section>
+        <div
+          class="grid grid-cols-1 items-center justify-center lg:grid-cols-2 gap-20"
+        >
+          <div class="shadow-perfect rounded-lg overflow-clip aspect-flag">
+            <img
+              src={country.flags.svg}
+              alt={country.name.common}
+              class="object-cover object-center w-full h-full"
+            />
+          </div>
+          <div>
+            <h1 class="font-bold text-4xl mb-4">{country.name.common}</h1>
+
+            <div class="list-none grid grid-cols-1 md:grid-cols-2">
+              <ul>
+                <li>
+                  <b>Native Name:</b>
+                  {
+                    Object.keys(country.name.nativeName).length > 0
+                      ? Object.values(country.name.nativeName)[0].common
+                      : "N/A"
+                  }
+                </li>
+                <li>
+                  <b>Population:</b>
+                  {country.population.toLocaleString()}
+                </li>
+                <li><b>Region:</b> {country.region}</li>
+                <li>
+                  <b>Sub Region:</b>
+                  {country.subregion.length > 0 ? country.subregion : "N/A"}
+                </li>
+                <li>
+                  <b>Capital:</b>
+                  {country.capital.length > 0 ? country.capital : "N/A"}
+                </li>
+              </ul>
+              <ul>
+                <li><b>Top Level Domain:</b> {country.tld[0]}</li>
+                <li>
+                  <b>Currencies:</b>
+                  {
+                    Object.values(country.currencies).length > 0
+                      ? Object.values(country.currencies)[0]?.name
+                      : "N/A"
+                  }
+                </li>
+                <li>
+                  <b>Language(s):</b>
+                  {
+                    Object.values(country.languages).length > 0
+                      ? Object.values(country.languages).join(", ")
+                      : "N/A"
+                  }
+                </li>
+              </ul>
+            </div>
+
+            {
+              country.borders.length > 0 ? (
+                <div class="flex justify-start items-center gap-4 mt-8">
+                  <b>Border Countries:</b>
+                  <ul class="flex flex-wrap gap-4">
+                    {country.borders.slice(0, 3).map((border: any) => (
+                      <li>
+                        <a
+                          href={`/countries/${border}`}
+                          class="underline underline-offset-3"
+                        >
+                          {border}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null
+            }
+          </div>
+        </div>
+      </section>
+    </Container>
+  </main>
+</Layout>

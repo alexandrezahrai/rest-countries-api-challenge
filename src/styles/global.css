@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-body: var(--font-nunito-sans);
+
+  --shadow-perfect: 0px 4px 4px #00000015, 0px 12px 12px #00000005;
+
+  --aspect-flag: 5 / 3;
+}

@@ -1,0 +1,32 @@
+---
+// imports
+import Layout from "../layouts/Layout.astro";
+import { fetchAllCountries } from "../data/data";
+import Search from "astro-pagefind/components/Search";
+
+// components
+import Container from "../components/Container.astro";
+import CountriesGrid from "../components/CountriesGrid.astro";
+
+// data
+const countries = await fetchAllCountries();
+const countriesSliced = countries.slice(0, 8); // slice first 8
+---
+
+<Layout>
+  <main>
+    <Container>
+      <Search
+        id="search"
+        className="pagefind-ui mb-16"
+        uiOptions={{ showImages: false }}
+      />
+      <section>
+        <CountriesGrid countries={countriesSliced} />
+        <a href="/countries" class="btn mt-8 place-content-center grid"
+          >View All</a
+        >
+      </section>
+    </Container>
+  </main>
+</Layout>

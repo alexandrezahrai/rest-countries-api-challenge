@@ -1,0 +1,13 @@
+---
+const { page } = Astro.props;
+---
+
+<div class="mt-8 flex flex-col justify-center items-center gap-4">
+  <div class="flex justify-center items-center gap-4">
+    {page.url.first ? <a href={page.url.first}>First</a> : null}
+    {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
+    {page.url.next ? <a href={page.url.next}>Next</a> : null}
+    {page.url.last ? <a href={page.url.last}>Last</a> : null}
+  </div>
+  <span>Page {page.currentPage} of {page.lastPage}</span>
+</div>

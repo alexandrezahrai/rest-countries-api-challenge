@@ -1,0 +1,38 @@
+---
+const { countries } = Astro.props;
+---
+
+<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  {
+    countries.map((c: any) => (
+      <li class="flex flex-col h-full">
+        <div class="overflow-clip rounded-md shadow-perfect flex-grow">
+          <div class="aspect-video">
+            <img
+              src={c.flags.svg}
+              alt={c.name.common}
+              class="w-full h-full object-cover object-center"
+            />
+          </div>
+          <div class="px-5 py-6 border-t border-gray-100">
+            <div>{c.name.common}</div>
+            <div class="flex flex-col justify-center items-start">
+              <p>
+                <b>Population:</b> {c.population.toLocaleString()}
+              </p>
+              <p>
+                <b>Region:</b> {c.region}
+              </p>
+              <p>
+                <b>Capital:</b> {c.capital}
+              </p>
+            </div>
+            <a href={`/countries/${c.cca3}`} class="btn mt-4">
+              View
+            </a>
+          </div>
+        </div>
+      </li>
+    ))
+  }
+</ul>
