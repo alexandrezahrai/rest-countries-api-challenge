@@ -42,7 +42,7 @@ const { page, regions, region } = Astro.props;
         uiOptions={{ showImages: false }}
       />
       <section>
-        <Filter regions={regions} region={region} client:load />
+        <Filter regions={regions} region={region} />
         <CountriesGrid countries={page.data} />
         <Pagination page={page} />
       </section>
