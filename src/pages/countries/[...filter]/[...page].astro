@@ -19,6 +19,7 @@ export async function getStaticPaths({
   const countries = await fetchAllCountries();
   // return paginate(countries, { pageSize: 8 });
   const regions = [...new Set(countries.map((c: any) => c.region))];
+  console.log("Regions in Filter component:", regions);
   return [
     ...paginate(countries, { pageSize: 8, props: { regions } }),
     ...regions.flatMap((region: any) => {
