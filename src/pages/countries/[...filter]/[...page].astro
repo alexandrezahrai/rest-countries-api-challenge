@@ -1,0 +1,51 @@
+---
+// imports
+import Layout from "../../../layouts/Layout.astro";
+import Search from "astro-pagefind/components/Search";
+import { fetchAllCountries } from "../../../data/data";
+
+// components
+import Container from "../../../components/Container.astro";
+import CountriesGrid from "../../../components/CountriesGrid.astro";
+import Pagination from "../../../components/Pagination.astro";
+import Filter from "../../../components/Filter.astro";
+
+// data
+export async function getStaticPaths({
+  paginate,
+}: {
+  paginate: (items: any[], options: any) => any;
+}) {
+  const countries = await fetchAllCountries();
+  // return paginate(countries, { pageSize: 8 });
+  const regions = [...new Set(countries.map((c: any) => c.region))];
+  return [
+    ...paginate(countries, { pageSize: 8, props: { regions } }),
+    ...regions.flatMap((region: any) => {
+      return paginate(
+        countries.filter((country: any) => country.region === region),
+        { pageSize: 8, props: { regions, region }, params: { filter: region } }
+      );
+    }),
+  ];
+}
+
+const { page, regions, region } = Astro.props;
+---
+
+<Layout>
+  <main>
+    <Container>
+      <Search
+        id="search"
+        className="pagefind-ui mb-8"
+        uiOptions={{ showImages: false }}
+      />
+      <section>
+        <Filter regions={regions} region={region} />
+        <CountriesGrid countries={page.data} />
+        <Pagination page={page} />
+      </section>
+    </Container>
+  </main>
+</Layout>

@@ -1,0 +1,18 @@
+---
+const { regions, region } = Astro.props;
+---
+
+<ul class="flex justify-center items-center gap-8 overflow-x-scroll">
+  {
+    regions.map((t: any) => (
+      <li class="font-bold mb-8">
+        <a
+          href={t === region ? "/countries" : `/countries/${t}/`}
+          class:list={t === region ? "active text-red-500" : ""}
+        >
+          {t}
+        </a>
+      </li>
+    ))
+  }
+</ul>
